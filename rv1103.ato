@@ -1,0 +1,98 @@
+component RV1103:
+    """Rockchip_RV1103G1 component"""
+    lcsc_id = "C5307358"
+    manufacturer = "Rockchip"
+    mpn = "RV1103G1"
+    datasheet_url = "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2404251628_Rockchip-RV1103G1_C5307358.pdf"
+    designator_prefix = "U"
+
+    # pins
+    signal CODEC_AVDD1V8 ~ pin 23
+    signal CODEC_LINEOUT ~ pin 21
+    signal CODEC_MIC0P_MICP ~ pin 24
+    signal CODEC_MIC1P_MICN ~ pin 26
+    signal CODEC_MICBIAS ~ pin 25
+    signal CODEC_VCM ~ pin 22
+    signal CPU_DVDD ~ pin 74
+    signal DDR_PLL_AVDD1V8 ~ pin 38
+    signal DDR_VDDQ_1 ~ pin 34
+    signal DDR_VDDQ_2 ~ pin 35
+    signal DDR_VDDQ_3 ~ pin 40
+    signal DRAM_ZQ ~ pin 37
+    signal DVDD_1 ~ pin 6
+    signal DVDD_2 ~ pin 36
+    signal DVDD_3 ~ pin 39
+    signal DVDD_4 ~ pin 58
+    signal DVDD_5 ~ pin 73
+    signal DVDD_6 ~ pin 75
+    signal ETH_AVDD3V3 ~ pin 71
+    signal ETH_EXTR ~ pin 72
+    signal ETH_PHY_RXN ~ pin 67
+    signal ETH_PHY_RXP ~ pin 68
+    signal ETH_PHY_TXN ~ pin 69
+    signal ETH_PHY_TXP ~ pin 70
+    signal FSPI_CLK_GPIO4_B1_d ~ pin 33
+    signal FSPI_CS0_GPIO4_B0_u ~ pin 32
+    signal FSPI_D0_GPIO4_A4_u ~ pin 29
+    signal FSPI_D1_GPIO4_A3_u ~ pin 30
+    signal FSPI_D2_GPIO4_A2_u ~ pin 31
+    signal FSPI_D3_GPIO4_A6_u ~ pin 28
+    signal GPIO1_VCC3V3 ~ pin 51
+    signal GPIO3_C5_d ~ pin 2
+    signal GPIO3_VCC ~ pin 27
+    signal GPIO4_VCC3V3 ~ pin 7
+    signal GPIO6_VCC ~ pin 59
+    signal I2C3_SCL_M1_UART5_TX_M1_PWM11_IR_M2_AUD_DSM_N_GPIO1_D3_d ~ pin 54
+    signal I2C3_SDA_M1_UART5_RX_M1_SPI0_CS1_M0_PWM0_M1_AUD_DSM_P_GPIO1_D2_d ~ pin 55
+    signal I2C4_SCL_M2_UART5_TX_M2_GPIO3_C7_d ~ pin 4
+    signal I2C4_SDA_M2_UART5_RX_M2_GPIO3_D0_d ~ pin 5
+    signal JTAG_CPU_TCK_M1_UART2_TX_M1_JTAG_HPMCU_TCK_M0_GPIO1_B2_d ~ pin 49
+    signal JTAG_CPU_TMS_M1_UART2_RX_M1_JTAG_HPMCU_TMS_M0_GPIO1_B3_u ~ pin 50
+    signal MIPI_AVDD1V8_GPIO7_VCC1V8 ~ pin 88
+    signal MIPI_CLK0_OUT_GPIO3_C4_d ~ pin 1
+    signal MIPI_CSI_RX_CK0N_LVDS_RX_CK0N_GPI3_C0_d ~ pin 84
+    signal MIPI_CSI_RX_CK0P_LVDS_RX_CK0P_GPI3_C1_d ~ pin 85
+    signal MIPI_CSI_RX_CK1N_LVDS_RX_CK1N_GPI3_B2_d ~ pin 78
+    signal MIPI_CSI_RX_CK1P_LVDS_RX_CK1P_GPI3_B3_d ~ pin 79
+    signal MIPI_CSI_RX_D0N_LVDS_RX_D0N_GPI3_C2_d ~ pin 86
+    signal MIPI_CSI_RX_D0P_LVDS_RX_D0P_GPI3_C3_d ~ pin 87
+    signal MIPI_CSI_RX_D1N_LVDS_RX_D1N_GPI3_B6_d ~ pin 82
+    signal MIPI_CSI_RX_D1P_LVDS_RX_D1P_GPI3_B7_d ~ pin 83
+    signal MIPI_CSI_RX_D2N_LVDS_RX_D2N_GPI3_B4_d ~ pin 80
+    signal MIPI_CSI_RX_D2P_LVDS_RX_D2P_GPI3_B5_d ~ pin 81
+    signal MIPI_CSI_RX_D3N_LVDS_RX_D3N_GPI3_B0_d ~ pin 76
+    signal MIPI_CSI_RX_D3P_LVDS_RX_D3P_GPI3_B1_d ~ pin 77
+    signal OSC_AVDD1V8_PLL_AVDD1V8 ~ pin 47
+    signal OSC_PLL_PMU_DVDD ~ pin 44
+    signal OSC_XIN ~ pin 45
+    signal OSC_XOUT ~ pin 46
+    signal OTP_AVDD1V8_ETH_AVDD1V8_TSADC_AVDD1V8 ~ pin 66
+    signal PMU_VCC3V3 ~ pin 43
+    signal PWM0_M0_CPU_AVS_GPIO1_A2_d ~ pin 48
+    signal PWM2_M2_SPI0_CS0_M0_SDMMC1_D1_M1_GPIO1_C0_d ~ pin 65
+    signal PWM3_IR_M2_UART5_RTS_M1_UART3_TX_M1_GPIO1_D0_d ~ pin 57
+    signal PWM4_M2_SPI0_CLK_M0_SDMMC1_D0_M1_GPIO1_C1_d ~ pin 64
+    signal PWM5_M2_I2C4_SCL_M1_SDMMC1_CLK_M1_SPI0_MOSI_M0_GPIO1_C2_d ~ pin 63
+    signal PWM6_M2_I2C4_SDA_M1_SDMMC1_CMD_M1_SPI0_MISO_M0_GPIO1_C3_d ~ pin 62
+    signal PWM7_IR_M2_MIPI_CLK1_OUT_GPIO3_C6_d ~ pin 3
+    signal PWM8_M1_UART4_RX_M1_SDMMC1_D3_M1_GPIO1_C4_d ~ pin 61
+    signal PWM9_M1_UART4_TX_M1_SDMMC1_D2_M1_GPIO1_C5_d ~ pin 60
+    signal PWM10_M1_UART4_RTSN_M1_GPIO1_C6_d ~ pin 52
+    signal PWM10_M2_UART5_CTS_M1_UART3_RX_M1_GPIO1_D1_d ~ pin 56
+    signal PWM11_IR_M1_UART4_CTSN_M1_GPIO1_C7_d ~ pin 53
+    signal PWR_CTRL_M0_PWM1_M0_GPIO0_A4_d ~ pin 42
+    signal SARADC_IN0_GPI4_C0_z ~ pin 16
+    signal SARADC_IN1_PWM1_M1_GPI4_C1_z ~ pin 15
+    signal SARADC_USB_AVDD1V8 ~ pin 17
+    signal SDMMC0_CLK_UART5_RTSN_M0_I2C0_SCL_M2_PWM10_M0_GPIO3_A4_d ~ pin 11
+    signal SDMMC0_CMD_UART5_CTS_M0_I2C0_SDA_M2_PWM11_IR_M0_GPIO3_A5_u ~ pin 12
+    signal SDMMC0_D0_UART2_RX_M0_PWM8_M0_GPIO3_A3_u ~ pin 10
+    signal SDMMC0_D1_UART2_TX_M0_PWM9_M0_GPIO3_A2_u ~ pin 9
+    signal SDMMC0_D2_UART5_RX_M0_JTAG_CPU_TCK_M0_JTAG_HPMCU_TCK_M1_GPIO3_A7_u ~ pin 14
+    signal SDMMC0_D3_UART5_TX_M0_JTAG_CPU_TMS_M0_JTAG_HPMCU_TMS_M1_GPIO3_A6_u ~ pin 13
+    signal SDMMC0_DET_GPIO3_A1_u ~ pin 8
+    signal TVSS ~ pin 41
+    signal USB_AVDD3V3 ~ pin 20
+    signal USB_DM ~ pin 18
+    signal USB_DP ~ pin 19
+    signal VSS ~ pin 89

@@ -1,5 +1,5 @@
-# rv1103
+# Rockchip RV1103
 
-rv1103 mcu
+Implementation based on the Luckfox Mini dev board
 
 Created by lucy moglia <eigenlucy@proton.me>
