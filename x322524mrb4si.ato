@@ -1,0 +1,14 @@
+component X322524MRB4SI:
+    """Yangxing_Tech_X322524MRB4SI component"""
+    lcsc_id = "C70571"
+    manufacturer = "Yangxing Tech"
+    mpn = "X322524MRB4SI"
+    datasheet_url = "https://www.lcsc.com/datasheet/lcsc_datasheet_2403291504_YXC-Crystal-Oscillators-X322524MRB4SI_C70571.pdf"
+    designator_prefix = "X"
+
+    # Load capacitance: 18pF
+    # pins
+    signal GND ~ pin 4
+    GND ~ pin 2
+    signal OSC1 ~ pin 1
+    signal OSC2 ~ pin 3

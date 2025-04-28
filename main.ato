@@ -6,11 +6,13 @@ from "rv1103.ato" import RV1103
 from "blm18pg121sn1d.ato" import BLM18PG121SN1D
 from "atopile/sd-card-slots/tf-01a.ato" import TF_01A
 from "w25q32jvzpiq.ato" import W25Q32JVZPIQ
+from "x322524mrb4si.ato" import X322524MRB4SI
 
 module App:
     mcu = new RV1103
     sd = new TF_01A
     flash = new W25Q32JVZPIQ
+    xosc = new X322524MRB4SI
 
     ## Power Rails ##
     #################
@@ -123,9 +125,18 @@ module App:
     C13.power ~ VCC1V8_CODEC
 
     # SDMMC_CLK Filter #
-    signal SDMMC_CLK
-    R19 = new Resistor; R19.value = 22ohm +/- 20%; R19.package = "R0201"
-    SDMMC_CLK ~ R19.p1; R19.p2 ~ SDMMC_CLK_FL
+    
+    ## Oscillator ##
+    ################
+    xosc.GND ~ power.gnd
+    C26 = new Capacitor; C26.value = 18pF +/- 5%; C26.package = "C0402"
+    C26.p1 ~ xosc.OSC1; C26.p2 ~ xosc.GND
+    C25 = new Capacitor; C25.value = 18pF +/- 5%; C25.package = "C0402"
+    C25.p1 ~ xosc.OSC2; C25.p2 ~ xosc.GND
+    R4 = new Resistor; R4.value = 22ohm +/- 5%; R4.package = "R0201"
+    R4.p1 ~ mcu.OSC_XOUT; R4.p2 ~ xosc.OSC2
+    R5 = new Resistor; R5.value = 1Mohm; R5.package = "R0201"
+    R5.p1 ~ mcu.OSC_XOUT; R5.p2 ~ mcu.OSC_XIN
 
     ## Ethernet Connections ##
     ##########################
@@ -144,6 +155,8 @@ module App:
     signal FSPI_D3 ~ mcu.FSPI_D3_GPIO4_A6_u # pin 28 >>
     signal FSPI_CS0N ~ mcu.FSPI_CS0_GPIO4_B0_u # pin 32 >>
     signal FSPI_CLK ~ mcu.FSPI_CLK_GPIO4_B1_d # pin 33 >>
+    C33 = new Capacitor; C33.value = 100nF +/- 20%; C33.package = "C0402"
+    C33.p1 ~ mcu.GPIO3_VCC; C33.p2 ~ power.gnd
 
     ## VCCIO4 SDMMC/UART/JTAG/PWM/I2C ##
     ####################################
@@ -153,7 +166,11 @@ module App:
     signal SDMMC_D2 ~ mcu.SDMMC0_D2_UART5_RX_M0_JTAG_CPU_TCK_M0_JTAG_HPMCU_TCK_M1_GPIO3_A7_u # pin 14 >>
     signal SDMMC_D3 ~ mcu.SDMMC0_D3_UART5_TX_M0_JTAG_CPU_TMS_M0_JTAG_HPMCU_TMS_M1_GPIO3_A6_u # pin 13 >>
     signal SDMMC_CLK_FL ~ mcu.SDMMC0_CLK_UART5_RTSN_M0_I2C0_SCL_M2_PWM10_M0_GPIO3_A4_d # SDMMC_CLK_FL -> R19 -> SDMMC_CLK # pin 11 >>
-    signal SDMMC_CMD ~ mcu.SDMMC0_CMD_UART5_CTS_M0_I2C0_SDA_M2_PWM11_IR_M0_GPIO3_A5_u >>
+    signal SDMMC_CLK
+    R19 = new Resistor; R19.value = 22ohm +/- 20%; R19.package = "R0201"
+    SDMMC_CLK ~ R19.p1; R19.p2 ~ SDMMC_CLK_FL
+
+    signal SDMMC_CMD ~ mcu.SDMMC0_CMD_UART5_CTS_M0_I2C0_SDA_M2_PWM11_IR_M0_GPIO3_A5_u # pin 12 >>
     VCC_3V3.vcc ~ mcu.GPIO4_VCC3V3
     C35 = new Capacitor; C35.value = 100nF +/- 20%; C35.package = "C0402"
     C35.p1 ~ mcu.GPIO4_VCC3V3; C35.p2 ~ power.gnd
@@ -203,15 +220,15 @@ module App:
     ###############
     flash.power ~ VCCIO_FLASH
     R10 = new Resistor; R10.value = 10kohm +/- 20%; R10.package = "R0201"
-    VCCIO_FLASH ~ R10.p1; R10.p2 ~ FSPI_D2
+    VCCIO_FLASH.vcc ~ R10.p1; R10.p2 ~ FSPI_D2
     R11 = new Resistor; R11.value = 10kohm +/- 20%; R11.package = "R0201"
-    VCCIO_FLASH ~ R11.p1; R11.p2 ~ FSPI_D3
+    VCCIO_FLASH.vcc ~ R11.p1; R11.p2 ~ FSPI_D3
     FSPI_CS0N ~ flash.CS # <<
     FSPI_D1 ~ flash.DO_D1 # >>
     FSPI_D2 ~ flash.WP_D2 # # >>
     FSPI_D3 ~ flash.HOLD_D3 # >>
     FSPI_CLK ~ flash.CLK # <<
-    FSPI_D0 ~ flash.DI_D0
+    FSPI_D0 ~ flash.DI_D0 # >>
 
 
 

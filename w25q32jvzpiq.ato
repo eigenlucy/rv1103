@@ -19,5 +19,5 @@ component W25Q32JVZPIQ:
     signal VCC ~ pin 8
     VSS ~ pin 9
 
-    power = new Power
+    power = new ElectricPower
     power.vcc ~ VCC; power.gnd ~ VSS
