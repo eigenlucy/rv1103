@@ -4,13 +4,16 @@ See Luckfox Pico Plus Schematic: https://files.luckfox.com/wiki/Luckfox-Pico/PDF
 import ElectricPower, Capacitor, Resistor
 from "rv1103.ato" import RV1103
 from "blm18pg121sn1d.ato" import BLM18PG121SN1D
+from "atopile/sd-card-slots/tf-01a.ato" import TF_01A
+from "w25q32jvzpiq.ato" import W25Q32JVZPIQ
 
 module App:
     mcu = new RV1103
+    sd = new TF_01A
+    flash = new W25Q32JVZPIQ
 
     ## Power Rails ##
     #################
-
     power = new ElectricPower # for common power.gnd
     mcu.VSS ~ power.gnd
 
@@ -45,6 +48,8 @@ module App:
     signal ETH_RN ~ mcu.ETH_PHY_RXN
     signal ETH_TP ~ mcu.ETH_PHY_TXP
     signal ETH_TN ~ mcu.ETH_PHY_TXN
+    R3 = new Resistor; R3.value = 6.4kohm +/- 20%; R3.package = "R0402"
+    mcu.ETH_EXTR ~ R3.p1; R3.p2 ~ power.gnd
 
     ## GPIO Connections ##
     ######################
@@ -64,6 +69,7 @@ module App:
 
     # CODEC_VCM Decoupling
     C1 = new Capacitor; C1.value = 4.7uF +/- 20%; C1.package = "C0603" # Can this be 0402?
+    C1.power ~ CODEC_VCM
 
     # VCC_3V3 Decoupling
     C2 = new Capacitor; C2.value = 100nF +/- 20%; C2.package = "C0402"

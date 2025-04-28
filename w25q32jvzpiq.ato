@@ -1,0 +1,18 @@
+component W25Q32JVZPIQ:
+    """Winbond_Elec_W25Q32JVZPIQ component"""
+    lcsc_id = "C571260"
+    manufacturer = "Winbond Elec"
+    mpn = "W25Q32JVZPIQ"
+    datasheet_url = "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Winbond-Elec-W25Q32JVZPIQ_C571260.pdf"
+    designator_prefix = "U"
+
+    # pins
+    pin 1
+    pin 2
+    pin 3
+    pin 4
+    pin 5
+    pin 6
+    pin 7
+    pin 8
+    pin 9
