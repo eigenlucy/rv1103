@@ -1,0 +1,12 @@
+component BLM18PG121SN1D:
+    """Murata_Electronics_BLM18PG121SN1D component"""
+    lcsc_id = "C14709"
+    manufacturer = "Murata Electronics"
+    mpn = "BLM18PG121SN1D"
+    datasheet_url = "https://www.lcsc.com/datasheet/lcsc_datasheet_2304140030_Murata-Electronics-BLM18PG121SN1D_C14709.pdf"
+    designator_prefix = "L"
+
+    # 50mOhm DC, 120ohm at 100MHz
+    # pins
+    signal p1 ~ pin 1
+    signal p2 ~ pin 2

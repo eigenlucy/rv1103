@@ -98,6 +98,13 @@ component RV1103:
     signal USB_DP ~ pin 19
     signal VSS ~ pin 89
 
+    ## Power Connections ##
+    #######################
     signal DVDD ~ CPU_DVDD
-    DVDD ~ DVDD_1; DVDD ~ DVDD_2; DVDD ~ DVDD_3; DVDD ~ DVDD_4; DVDD ~ DVDD_5; DVDD ~ DVDD_6
-    DVDD ~ OSC_PLL_PMU_DVDD
+    DVDD ~ DVDD_1; DVDD ~ DVDD_2; DVDD ~ DVDD_3; DVDD ~ DVDD_4; DVDD ~ DVDD_5; DVDD ~ DVDD_6; DVDD ~ OSC_PLL_PMU_DVDD
+
+    signal VCC_DDR ~ DDR_VDDQ_1; VCC_DDR ~ DDR_VDDQ_2; VCC_DDR ~ DDR_VDDQ_3
+
+    signal VCC_3V3 ~ ETH_AVDD3V3; VCC_3V3 ~ USB_AVDD3V3
+
+    signal VCC_1V8 ~ DDR_PLL_AVDD1V8

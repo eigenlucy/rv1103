@@ -3,15 +3,79 @@ See Luckfox Pico Plus Schematic: https://files.luckfox.com/wiki/Luckfox-Pico/PDF
 """
 import ElectricPower, Capacitor, Resistor
 from "rv1103.ato" import RV1103
+from "blm18pg121sn1d.ato" import BLM18PG121SN1D
 
 module App:
     mcu = new RV1103
 
-    VDD_0V9 = new ElectricPower
-    VDD_0V9.vcc ~ mcu.DVDD
-    VCC_DDR = new ElectricPower
-    VDD_0V9.gnd ~ mcu.VSS
+    ## Power Rails ##
+    #################
 
+    power = new ElectricPower # for common power.gnd
+    mcu.VSS ~ power.gnd
+
+    VCC_3V3 = new ElectricPower
+    VCC_3V3.gnd ~ power.gnd
+    VCC_3V3.vcc ~ mcu.VCC_3V3
+
+    VDD_0V9 = new ElectricPower
+    VDD_0V9.gnd ~ power.gnd
+    VDD_0V9.vcc ~ mcu.DVDD
+
+    VCC_DDR = new ElectricPower
+    VCC_DDR.gnd ~ power.gnd
+    VCC_DDR.vcc ~ mcu.VCC_DDR
+
+    VCC_1V8 = new ElectricPower
+    VCC_1V8.gnd ~ power.gnd
+    VCC_1V8.vcc ~ mcu.VCC_1V8
+
+    VCC1V8_CODEC = new ElectricPower # VCC_1V8 -> Ferrite Bead Close to MCU -> Additional Decoupling -> VCC1V8_CODEC
+    VCC1V8_CODEC.gnd ~ power.gnd
+
+    CODEC_VCM = new ElectricPower
+    CODEC_VCM.gnd ~ power.gnd
+
+    AVDD1V8_USB = new ElectricPower
+    AVDD1V8_USB.gnd ~ power.gnd
+
+     ## Ethernet Connections ##
+    ##########################
+    signal ETH_RP ~ mcu.ETH_PHY_RXP
+    signal ETH_RN ~ mcu.ETH_PHY_RXN
+    signal ETH_TP ~ mcu.ETH_PHY_TXP
+    signal ETH_TN ~ mcu.ETH_PHY_TXN
+
+    ## GPIO Connections ##
+    ######################
+    signal SDMMC_DET ~ mcu.SDMMC0_DET_GPIO3_A1_u
+    signal SDMMC_D0 ~ mcu.SDMMC0_D0_UART2_RX_M0_PWM8_M0_GPIO3_A3_u
+    signal SDMMC_D1 ~ mcu.SDMMC0_D1_UART2_TX_M0_PWM9_M0_GPIO3_A2_u
+    signal SDMMC_D2 ~ mcu.SDMMC0_D2_UART5_RX_M0_JTAG_CPU_TCK_M0_JTAG_HPMCU_TCK_M1_GPIO3_A7_u
+    signal SDMMC_D3 ~ mcu.SDMMC0_D3_UART5_TX_M0_JTAG_CPU_TMS_M0_JTAG_HPMCU_TMS_M1_GPIO3_A6_u
+    signal SDMMC_CLK_FL ~ mcu.SDMMC0_CLK_UART5_RTSN_M0_I2C0_SCL_M2_PWM10_M0_GPIO3_A4_d # SDMMC_CLK_FL -> R19 -> SDMMC_CLK
+
+    ## DECOUPLING / FILTERING ##
+    ############################
+
+    # DRAM_ZQ Fitler
+    R1 = new Resistor; R1.value = 240ohm +/- 10%; R1.package = "R0201"
+    mcu.DRAM_ZQ ~ R1.p1; R1.p2 ~ power.gnd
+
+    # CODEC_VCM Decoupling
+    C1 = new Capacitor; C1.value = 4.7uF +/- 20%; C1.package = "C0603" # Can this be 0402?
+
+    # VCC_3V3 Decoupling
+    C2 = new Capacitor; C2.value = 100nF +/- 20%; C2.package = "C0402"
+    C2.power ~ VCC_3V3
+    VCC_3V3.vcc ~ mcu.ETH_AVDD3V3
+    C3 = new Capacitor; C3.value = 100nF +/- 20%; C3.package = "C0402"
+    C3.power ~ VCC_3V3
+
+    # AVDD1V8_USB Decoupling
+    R2 = new Resistor; R2.value = 1ohm +/- 10%; R2.package = "R0402"
+    VCC_1V8.vcc ~ R2.p1; R2.p2 ~ AVDD1V8_USB.vcc;
+    C4 = new Capacitor; C4.value = 100nF +/- 20%; C4.package = "C0402"
 
     # CPU_DVDD Decoupling Capacitors
     C5 = new Capacitor; C5.value = 10uF +/- 20%; C5.package = "C0603"
@@ -35,7 +99,7 @@ module App:
     C16 = new Capacitor; C16.value = 10uF +/- 20%; C16.package = "C0402"
     C16.power ~ VDD_0V9
     C17 = new Capacitor; C17.value = 1uF +/- 20%; C17.package = "C0402"
-    C17.Power ~ VDD_0V9
+    C17.power ~ VDD_0V9
     C18 = new Capacitor; C18.value = 1uF +/- 20%; C18.package = "C0402"
     C18.power ~ VDD_0V9
     C19 = new Capacitor; C19.value = 100nF +/- 20%; C19.package = "C0402"
@@ -46,4 +110,22 @@ module App:
     C21.power ~ VDD_0V9
     C22 = new Capacitor; C22.value = 100nF +/- 20%; C22.package = "C0402"
     C22.power ~ VDD_0V9
+
+    # VCC_1V8 / AVDD18_DDR decoupling caps
+    C23 = new Capacitor; C23.value = 1uF +/- 20%; C23.package = "C0402"
+    C23.power ~ VCC_1V8
+    C24 = new Capacitor; C24.value = 100nF +/- 20%; C24.package = "C0402"
+    C24.power ~ VCC_1V8
+    FB1 = new BLM18PG121SN1D
+    VCC_1V8.vcc ~ FB1.p1; FB1.p2 ~ VCC1V8_CODEC.vcc
+    C12 = new Capacitor; C12.value = 10uF +/- 20%; C12.package = "C0603"
+    C12.power ~ VCC1V8_CODEC
+    C13 = new Capacitor; C13.value = 100nF +/- 20%; C13.package = "C0402"
+    C13.power ~ VCC1V8_CODEC
+
+    # SDMMC_CLK Filter
+    signal SDMMC_CLK
+    R19 = new Resistor; R19.value = 22ohm +/- 20%; R19.package = "R0201"
+    SDMMC_CLK ~ R19.p1; R19.p2 ~ SDMMC_CLK_FL
+
 
