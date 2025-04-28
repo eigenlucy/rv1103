@@ -1,3 +1,5 @@
+import ElectricPower
+
 component W25Q32JVZPIQ:
     """Winbond_Elec_W25Q32JVZPIQ component"""
     lcsc_id = "C571260"
@@ -7,12 +9,15 @@ component W25Q32JVZPIQ:
     designator_prefix = "U"
 
     # pins
-    pin 1
-    pin 2
-    pin 3
-    pin 4
-    pin 5
-    pin 6
-    pin 7
-    pin 8
-    pin 9
+    signal CS ~ pin 1
+    signal DO_D1 ~ pin 2
+    signal WP_D2 ~ pin 3
+    signal VSS ~ pin 4
+    signal DI_D0 ~ pin 5
+    signal HOLD_D3 ~ pin 6
+    signal CLK ~ pin 7
+    signal VCC ~ pin 8
+    VSS ~ pin 9
+
+    power = new Power
+    power.vcc ~ VCC; power.gnd ~ VSS

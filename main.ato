@@ -33,6 +33,9 @@ module App:
     VCC_1V8.gnd ~ power.gnd
     VCC_1V8.vcc ~ mcu.VCC_1V8
 
+    VCCIO_FLASH = new ElectricPower
+    VCCIO_FLASH.gnd ~ power.gnd
+
     VCC1V8_CODEC = new ElectricPower # VCC_1V8 -> Ferrite Bead Close to MCU -> Additional Decoupling -> VCC1V8_CODEC
     VCC1V8_CODEC.gnd ~ power.gnd
 
@@ -41,24 +44,6 @@ module App:
 
     AVDD1V8_USB = new ElectricPower
     AVDD1V8_USB.gnd ~ power.gnd
-
-     ## Ethernet Connections ##
-    ##########################
-    signal ETH_RP ~ mcu.ETH_PHY_RXP
-    signal ETH_RN ~ mcu.ETH_PHY_RXN
-    signal ETH_TP ~ mcu.ETH_PHY_TXP
-    signal ETH_TN ~ mcu.ETH_PHY_TXN
-    R3 = new Resistor; R3.value = 6.4kohm +/- 20%; R3.package = "R0402"
-    mcu.ETH_EXTR ~ R3.p1; R3.p2 ~ power.gnd
-
-    ## GPIO Connections ##
-    ######################
-    signal SDMMC_DET ~ mcu.SDMMC0_DET_GPIO3_A1_u
-    signal SDMMC_D0 ~ mcu.SDMMC0_D0_UART2_RX_M0_PWM8_M0_GPIO3_A3_u
-    signal SDMMC_D1 ~ mcu.SDMMC0_D1_UART2_TX_M0_PWM9_M0_GPIO3_A2_u
-    signal SDMMC_D2 ~ mcu.SDMMC0_D2_UART5_RX_M0_JTAG_CPU_TCK_M0_JTAG_HPMCU_TCK_M1_GPIO3_A7_u
-    signal SDMMC_D3 ~ mcu.SDMMC0_D3_UART5_TX_M0_JTAG_CPU_TMS_M0_JTAG_HPMCU_TMS_M1_GPIO3_A6_u
-    signal SDMMC_CLK_FL ~ mcu.SDMMC0_CLK_UART5_RTSN_M0_I2C0_SCL_M2_PWM10_M0_GPIO3_A4_d # SDMMC_CLK_FL -> R19 -> SDMMC_CLK
 
     ## DECOUPLING / FILTERING ##
     ############################
@@ -117,11 +102,18 @@ module App:
     C22 = new Capacitor; C22.value = 100nF +/- 20%; C22.package = "C0402"
     C22.power ~ VDD_0V9
 
-    # VCC_1V8 / AVDD18_DDR decoupling caps
+    # VCC_1V8 / AVDD18_DDR Decoupling
     C23 = new Capacitor; C23.value = 1uF +/- 20%; C23.package = "C0402"
     C23.power ~ VCC_1V8
     C24 = new Capacitor; C24.value = 100nF +/- 20%; C24.package = "C0402"
     C24.power ~ VCC_1V8
+
+    # VCCIO_FLASH Decoupling
+    VCC_3V3 ~ VCCIO_FLASH # Select 1v8 or 3v3 according to flash ic voltage, for w25q32jvzpiq use 3v3
+    C31 = new Capacitor; C31.value = 1uF +/- 20%; C31.package = "C0402"
+    C32 = new Capacitor; C32.value = 100nF +/- 20%; C32.package = "C0402"
+
+    # VCC1V8_CODEC Decoupling
     FB1 = new BLM18PG121SN1D
     VCC_1V8.vcc ~ FB1.p1; FB1.p2 ~ VCC1V8_CODEC.vcc
     C12 = new Capacitor; C12.value = 10uF +/- 20%; C12.package = "C0603"
@@ -133,5 +125,56 @@ module App:
     signal SDMMC_CLK
     R19 = new Resistor; R19.value = 22ohm +/- 20%; R19.package = "R0201"
     SDMMC_CLK ~ R19.p1; R19.p2 ~ SDMMC_CLK_FL
+
+    ## Ethernet Connections ##
+    ##########################
+    signal ETH_RP ~ mcu.ETH_PHY_RXP
+    signal ETH_RN ~ mcu.ETH_PHY_RXN
+    signal ETH_TP ~ mcu.ETH_PHY_TXP
+    signal ETH_TN ~ mcu.ETH_PHY_TXN
+    R3 = new Resistor; R3.value = 6.4kohm +/- 20%; R3.package = "R0402"
+    mcu.ETH_EXTR ~ R3.p1; R3.p2 ~ power.gnd
+
+    ## VCCIO3 FSPI ##
+    #################
+    signal FSPI_D0 ~ mcu.FSPI_D0_GPIO4_A4_u # pin 29
+    signal FSPI_D1 ~ mcu.FSPI_D1_GPIO4_A3_u # pin 30
+    signal FSPI_D2 ~ mcu.FSPI_D2_GPIO4_A2_u # pin 31
+    signal FSPI_D3 ~ mcu.FSPI_D3_GPIO4_A6_u # pin 28
+    signal FSPI_CS0N ~ mcu.FSPI_CS0_GPIO4_B0_u # pin 32
+    signal FSPI_CLK ~ mcu.FSPI_CLK_GPIO4_B1_d # pin 33
+    
+
+    ## VCCIO4 SDMMC/UART/JTAG/PWM/I2C ##
+    ####################################
+    signal SDMMC_DET ~ mcu.SDMMC0_DET_GPIO3_A1_u # pin 8
+    signal SDMMC_D0 ~ mcu.SDMMC0_D0_UART2_RX_M0_PWM8_M0_GPIO3_A3_u # pin 10
+    signal SDMMC_D1 ~ mcu.SDMMC0_D1_UART2_TX_M0_PWM9_M0_GPIO3_A2_u # pin 9
+    signal SDMMC_D2 ~ mcu.SDMMC0_D2_UART5_RX_M0_JTAG_CPU_TCK_M0_JTAG_HPMCU_TCK_M1_GPIO3_A7_u # pin 14
+    signal SDMMC_D3 ~ mcu.SDMMC0_D3_UART5_TX_M0_JTAG_CPU_TMS_M0_JTAG_HPMCU_TMS_M1_GPIO3_A6_u # pin 13
+    signal SDMMC_CLK_FL ~ mcu.SDMMC0_CLK_UART5_RTSN_M0_I2C0_SCL_M2_PWM10_M0_GPIO3_A4_d # SDMMC_CLK_FL -> R19 -> SDMMC_CLK # pin 11
+    signal SDMMC_CMD ~ mcu.SDMMC0_CMD_UART5_CTS_M0_I2C0_SDA_M2_PWM11_IR_M0_GPIO3_A5_u
+    VCC_3V3.vcc ~ mcu.GPIO4_VCC3V3
+    C35 = new Capacitor; C35.value = 100nF +/- 20%; C35.package + "C0402"
+
+    ## SPI Flash ##
+    ###############
+    flash.power ~ VCCIO_FLASH
+    R10 = new Resistor; R10.value = 10kohm +/- 20%; R10.package = "R0402"
+    VCCIO_FLASH ~ R10.p1; R10.p2 ~ FSPI_D2
+    R11 = new Resistor; R11.value = 10kohm +/- 20%; R11.package = "R0402"
+    VCCIO_FLASH ~ R11.p1; R11.p2 ~ FSPI_D3
+    FSPI_CS0N ~ flash.CS
+    FSPI_D1 ~ flash.DO_D1
+    FSPI_D2 ~ flash.WP_D2
+    FSPI_D3 ~ flash.HOLD_D3
+    FSPI_CLK ~ flash.CLK
+    FSPI_D0 ~ flash.DI_D0
+
+
+
+
+
+
 
 
