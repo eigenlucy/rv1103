@@ -47,28 +47,27 @@ module App:
 
     ## DECOUPLING / FILTERING ##
     ############################
-
-    # DRAM_ZQ Fitler
+    # DRAM_ZQ Fitler #
     R1 = new Resistor; R1.value = 240ohm +/- 10%; R1.package = "R0201"
     mcu.DRAM_ZQ ~ R1.p1; R1.p2 ~ power.gnd
 
-    # CODEC_VCM Decoupling
+    # CODEC_VCM Decoupling #
     C1 = new Capacitor; C1.value = 4.7uF +/- 20%; C1.package = "C0603" # Can this be 0402?
     C1.power ~ CODEC_VCM
 
-    # VCC_3V3 Decoupling
+    # VCC_3V3 Decoupling #
     C2 = new Capacitor; C2.value = 100nF +/- 20%; C2.package = "C0402"
     C2.power ~ VCC_3V3
     VCC_3V3.vcc ~ mcu.ETH_AVDD3V3
     C3 = new Capacitor; C3.value = 100nF +/- 20%; C3.package = "C0402"
     C3.power ~ VCC_3V3
 
-    # AVDD1V8_USB Decoupling
+    # AVDD1V8_USB Decoupling #
     R2 = new Resistor; R2.value = 1ohm +/- 10%; R2.package = "R0402"
     VCC_1V8.vcc ~ R2.p1; R2.p2 ~ AVDD1V8_USB.vcc;
     C4 = new Capacitor; C4.value = 100nF +/- 20%; C4.package = "C0402"
 
-    # CPU_DVDD Decoupling Capacitors
+    # CPU_DVDD Decoupling Capacitors #
     C5 = new Capacitor; C5.value = 10uF +/- 20%; C5.package = "C0603"
     C5.power ~ VDD_0V9
     C6 = new Capacitor; C6.value = 1uF +/- 20%; C6.package = "C0402"
@@ -76,13 +75,13 @@ module App:
     C7 = new Capacitor; C7.value = 100nF +/- 20%; C7.package = "C0402"
     C7.power ~ VDD_0V9
 
-    # VCC_DDR Decoupling Capacitors
+    # VCC_DDR Decoupling Capacitors #
     C8 = new Capacitor; C8.value = 10uF +/- 20%; C8.package = "C0603"
     C9 = new Capacitor; C9.value = 1uF +/- 20%; C9.package = "C0402"
     C10 = new Capacitor; C10.value = 1uF +/- 20%; C10.package = "C0402"
     C11 = new Capacitor; C11.value = 100nF +/- 20%; C11.package = "C0402"
 
-    # IO/NPU/VEPU DVDD Decoupling Capacitors
+    # IO/NPU/VEPU DVDD Decoupling Capacitors #
     C14 = new Capacitor; C14.value = 10uF +/- 20%; C14.package = "C0402"
     C14.power ~ VDD_0V9
     C15 = new Capacitor; C15.value = 10uF +/- 20%; C15.package = "C0402"
@@ -102,18 +101,20 @@ module App:
     C22 = new Capacitor; C22.value = 100nF +/- 20%; C22.package = "C0402"
     C22.power ~ VDD_0V9
 
-    # VCC_1V8 / AVDD18_DDR Decoupling
+    # VCC_1V8 / AVDD18_DDR Decoupling # 
     C23 = new Capacitor; C23.value = 1uF +/- 20%; C23.package = "C0402"
     C23.power ~ VCC_1V8
     C24 = new Capacitor; C24.value = 100nF +/- 20%; C24.package = "C0402"
     C24.power ~ VCC_1V8
 
-    # VCCIO_FLASH Decoupling
+    # VCCIO_FLASH Decoupling #
     VCC_3V3 ~ VCCIO_FLASH # Select 1v8 or 3v3 according to flash ic voltage, for w25q32jvzpiq use 3v3
     C31 = new Capacitor; C31.value = 1uF +/- 20%; C31.package = "C0402"
+    C31.power ~ VCCIO_FLASH
     C32 = new Capacitor; C32.value = 100nF +/- 20%; C32.package = "C0402"
+    C32.power ~ VCCIO_FLASH
 
-    # VCC1V8_CODEC Decoupling
+    # VCC1V8_CODEC Decoupling #
     FB1 = new BLM18PG121SN1D
     VCC_1V8.vcc ~ FB1.p1; FB1.p2 ~ VCC1V8_CODEC.vcc
     C12 = new Capacitor; C12.value = 10uF +/- 20%; C12.package = "C0603"
@@ -121,54 +122,95 @@ module App:
     C13 = new Capacitor; C13.value = 100nF +/- 20%; C13.package = "C0402"
     C13.power ~ VCC1V8_CODEC
 
-    # SDMMC_CLK Filter
+    # SDMMC_CLK Filter #
     signal SDMMC_CLK
     R19 = new Resistor; R19.value = 22ohm +/- 20%; R19.package = "R0201"
     SDMMC_CLK ~ R19.p1; R19.p2 ~ SDMMC_CLK_FL
 
     ## Ethernet Connections ##
     ##########################
-    signal ETH_RP ~ mcu.ETH_PHY_RXP
-    signal ETH_RN ~ mcu.ETH_PHY_RXN
-    signal ETH_TP ~ mcu.ETH_PHY_TXP
-    signal ETH_TN ~ mcu.ETH_PHY_TXN
+    signal ETH_RP ~ mcu.ETH_PHY_RXP # pin 68 <<
+    signal ETH_RN ~ mcu.ETH_PHY_RXN # pin 67 <<
+    signal ETH_TP ~ mcu.ETH_PHY_TXP # pin 70 >>
+    signal ETH_TN ~ mcu.ETH_PHY_TXN # pin 69 <<
     R3 = new Resistor; R3.value = 6.4kohm +/- 20%; R3.package = "R0402"
     mcu.ETH_EXTR ~ R3.p1; R3.p2 ~ power.gnd
 
     ## VCCIO3 FSPI ##
     #################
-    signal FSPI_D0 ~ mcu.FSPI_D0_GPIO4_A4_u # pin 29
-    signal FSPI_D1 ~ mcu.FSPI_D1_GPIO4_A3_u # pin 30
-    signal FSPI_D2 ~ mcu.FSPI_D2_GPIO4_A2_u # pin 31
-    signal FSPI_D3 ~ mcu.FSPI_D3_GPIO4_A6_u # pin 28
-    signal FSPI_CS0N ~ mcu.FSPI_CS0_GPIO4_B0_u # pin 32
-    signal FSPI_CLK ~ mcu.FSPI_CLK_GPIO4_B1_d # pin 33
-    
+    signal FSPI_D0 ~ mcu.FSPI_D0_GPIO4_A4_u # pin 29 >>
+    signal FSPI_D1 ~ mcu.FSPI_D1_GPIO4_A3_u # pin 30 >>
+    signal FSPI_D2 ~ mcu.FSPI_D2_GPIO4_A2_u # pin 31 >>
+    signal FSPI_D3 ~ mcu.FSPI_D3_GPIO4_A6_u # pin 28 >>
+    signal FSPI_CS0N ~ mcu.FSPI_CS0_GPIO4_B0_u # pin 32 >>
+    signal FSPI_CLK ~ mcu.FSPI_CLK_GPIO4_B1_d # pin 33 >>
 
     ## VCCIO4 SDMMC/UART/JTAG/PWM/I2C ##
     ####################################
-    signal SDMMC_DET ~ mcu.SDMMC0_DET_GPIO3_A1_u # pin 8
-    signal SDMMC_D0 ~ mcu.SDMMC0_D0_UART2_RX_M0_PWM8_M0_GPIO3_A3_u # pin 10
-    signal SDMMC_D1 ~ mcu.SDMMC0_D1_UART2_TX_M0_PWM9_M0_GPIO3_A2_u # pin 9
-    signal SDMMC_D2 ~ mcu.SDMMC0_D2_UART5_RX_M0_JTAG_CPU_TCK_M0_JTAG_HPMCU_TCK_M1_GPIO3_A7_u # pin 14
-    signal SDMMC_D3 ~ mcu.SDMMC0_D3_UART5_TX_M0_JTAG_CPU_TMS_M0_JTAG_HPMCU_TMS_M1_GPIO3_A6_u # pin 13
-    signal SDMMC_CLK_FL ~ mcu.SDMMC0_CLK_UART5_RTSN_M0_I2C0_SCL_M2_PWM10_M0_GPIO3_A4_d # SDMMC_CLK_FL -> R19 -> SDMMC_CLK # pin 11
-    signal SDMMC_CMD ~ mcu.SDMMC0_CMD_UART5_CTS_M0_I2C0_SDA_M2_PWM11_IR_M0_GPIO3_A5_u
+    signal SDMMC_DET ~ mcu.SDMMC0_DET_GPIO3_A1_u # pin 8 <<
+    signal SDMMC_D0 ~ mcu.SDMMC0_D0_UART2_RX_M0_PWM8_M0_GPIO3_A3_u # pin 10 >>
+    signal SDMMC_D1 ~ mcu.SDMMC0_D1_UART2_TX_M0_PWM9_M0_GPIO3_A2_u # pin 9 >>
+    signal SDMMC_D2 ~ mcu.SDMMC0_D2_UART5_RX_M0_JTAG_CPU_TCK_M0_JTAG_HPMCU_TCK_M1_GPIO3_A7_u # pin 14 >>
+    signal SDMMC_D3 ~ mcu.SDMMC0_D3_UART5_TX_M0_JTAG_CPU_TMS_M0_JTAG_HPMCU_TMS_M1_GPIO3_A6_u # pin 13 >>
+    signal SDMMC_CLK_FL ~ mcu.SDMMC0_CLK_UART5_RTSN_M0_I2C0_SCL_M2_PWM10_M0_GPIO3_A4_d # SDMMC_CLK_FL -> R19 -> SDMMC_CLK # pin 11 >>
+    signal SDMMC_CMD ~ mcu.SDMMC0_CMD_UART5_CTS_M0_I2C0_SDA_M2_PWM11_IR_M0_GPIO3_A5_u >>
     VCC_3V3.vcc ~ mcu.GPIO4_VCC3V3
-    C35 = new Capacitor; C35.value = 100nF +/- 20%; C35.package + "C0402"
+    C35 = new Capacitor; C35.value = 100nF +/- 20%; C35.package = "C0402"
+    C35.p1 ~ mcu.GPIO4_VCC3V3; C35.p2 ~ power.gnd
+
+
+    ## VCCIO6 PWM/UART/I2C/SDIO/SPI/AUD_DSM ##
+    ##########################################
+    signal GPIO1_C0_d ~ mcu.PWM2_M2_SPI0_CS0_M0_SDMMC1_D1_M1_GPIO1_C0_d # pin 65 >>
+    signal GPIO_C1_d ~ mcu.PWM4_M2_SPI0_CLK_M0_SDMMC1_D0_M1_GPIO1_C1_d # pin 64 >>
+    signal GPIO1_C2_d ~ mcu.PWM5_M2_I2C4_SCL_M1_SDMMC1_CLK_M1_SPI0_MOSI_M0_GPIO1_C2_d # pin 63 >>
+    signal GPIO1_C3_d ~ mcu.PWM6_M2_I2C4_SDA_M1_SDMMC1_CMD_M1_SPI0_MISO_M0_GPIO1_C3_d # pin 62 >>
+    signal GPIO1_C4_d ~ mcu.PWM8_M1_UART4_RX_M1_SDMMC1_D3_M1_GPIO1_C4_d # pin 61 >>
+    signal GPIO1_C5_d ~ mcu.PWM9_M1_UART4_TX_M1_SDMMC1_D2_M1_GPIO1_C5_d # pin 60 >>
+    signal GPIO1_C6_d ~ mcu.PWM10_M1_UART4_RTSN_M1_GPIO1_C6_d # pin 52 >>
+    signal GPIO_C7_d ~ mcu.PWM11_IR_M1_UART4_CTSN_M1_GPIO1_C7_d # pin 53 >>
+    signal GPIO_D0_d ~ mcu.PWM3_IR_M2_UART5_RTS_M1_UART3_TX_M1_GPIO1_D0_d # pin 57 >>
+    signal GPIO1_D1_d ~ mcu.PWM10_M2_UART5_CTS_M1_UART3_RX_M1_GPIO1_D1_d # pin 56 >>
+    signal GPIO1_D2_d ~ mcu.I2C3_SDA_M1_UART5_RX_M1_SPI0_CS1_M0_PWM0_M1_AUD_DSM_P_GPIO1_D2_d # pin 55 >>
+    signal GPIO_D3_d ~ mcu.I2C3_SCL_M1_UART5_TX_M1_PWM11_IR_M2_AUD_DSM_N_GPIO1_D3_d # pin 54 >>
+    VCC_3V3.vcc ~ mcu.GPIO6_VCC
+    C36 = new Capacitor; C36.value = 100nF +/- 20%; C36.package = "C0402"
+    C36.p1 ~ mcu.GPIO6_VCC; C36.p2 ~ power.gnd
+
+    ## VCCIO7 MIPI_CSI/LVDS_RX/UART/I2C (1V8 ONLY!!!!)##
+    ####################################################
+    signal MIPI_LVDS_D3N ~ mcu.MIPI_CSI_RX_D3N_LVDS_RX_D3N_GPI3_B0_d # pin 76 <<
+    signal MIPI_LVDS_D2P ~ mcu.MIPI_CSI_RX_D3P_LVDS_RX_D3P_GPI3_B1_d # pin 77 <<
+    signal GP13_B2_d ~ mcu.MIPI_CSI_RX_CK1N_LVDS_RX_CK1N_GPI3_B2_d # pin 78 >>
+    signal GP13_B3_d ~ mcu.MIPI_CSI_RX_CK1P_LVDS_RX_CK1P_GPI3_B3_d # pin 79 >>
+    signal MIPI_LVDS_D2N ~ mcu.MIPI_CSI_RX_D2N_LVDS_RX_D2N_GPI3_B4_d # pin 80 <<
+    signal MIPI_LVDS_D2P ~ mcu.MIPI_CSI_RX_D2P_LVDS_RX_D2P_GPI3_B5_d # pin 81 <<
+    signal MIPI_LVDS_D1N ~ mcu.MIPI_CSI_RX_D1N_LVDS_RX_D1N_GPI3_B6_d # pin 82 <<
+    signal MIPI_LVDS_D1P ~ mcu.MIPI_CSI_RX_D1P_LVDS_RX_D1P_GPI3_B7_d # pin 83 <<
+    signal MIPI_LVDS_CLKN ~ mcu.MIPI_CSI_RX_CK0N_LVDS_RX_CK0N_GPI3_C0_d # pin 84 <<
+    signal MIPI_LVDS_CLKP ~ mcu.MIPI_CSI_RX_CK0P_LVDS_RX_CK0P_GPI3_C1_d # pin 85 <<
+    signal MIPI_LVDS_D0N ~ mcu.MIPI_CSI_RX_D0N_LVDS_RX_D0N_GPI3_C2_d # pin 86 <<
+    signal MIPI_LVDS_D0P ~ mcu.MIPI_CSI_RX_D0P_LVDS_RX_D0P_GPI3_C3_d # pin 87 <<
+    signal MIPI_LVDS_MCLK0_FL ~ mcu.MIPI_CLK0_OUT_GPIO3_C4_d # pin 1 >>
+    R24 = new Resistor; R24.value = 22ohm +/- 20%; R24.package = "R0201"
+    signal MIPI_LVDS_MCLK0 ~ R24.p1; MIPI_LVDS_MCLK0_FL ~ R24.p2 # CLK Filter >>
+    signal MIPI_LVDS_RST ~ mcu.GPIO3_C5_d # pin 2 >>
+    signal GPIO3_C6_d ~ mcu.PWM7_IR_M2_MIPI_CLK1_OUT_GPIO3_C6_d # pin 3 >>
+    signal MIPI_I2C_SCL ~ mcu.I2C4_SCL_M2_UART5_TX_M2_GPIO3_C7_d # pin 4 >>
+    signal MIPI_I2C_SDA ~ mcu.I2C4_SDA_M2_UART5_RX_M2_GPIO3_D0_d # pin 5 >>
 
     ## SPI Flash ##
     ###############
     flash.power ~ VCCIO_FLASH
-    R10 = new Resistor; R10.value = 10kohm +/- 20%; R10.package = "R0402"
+    R10 = new Resistor; R10.value = 10kohm +/- 20%; R10.package = "R0201"
     VCCIO_FLASH ~ R10.p1; R10.p2 ~ FSPI_D2
-    R11 = new Resistor; R11.value = 10kohm +/- 20%; R11.package = "R0402"
+    R11 = new Resistor; R11.value = 10kohm +/- 20%; R11.package = "R0201"
     VCCIO_FLASH ~ R11.p1; R11.p2 ~ FSPI_D3
-    FSPI_CS0N ~ flash.CS
-    FSPI_D1 ~ flash.DO_D1
-    FSPI_D2 ~ flash.WP_D2
-    FSPI_D3 ~ flash.HOLD_D3
-    FSPI_CLK ~ flash.CLK
+    FSPI_CS0N ~ flash.CS # <<
+    FSPI_D1 ~ flash.DO_D1 # >>
+    FSPI_D2 ~ flash.WP_D2 # # >>
+    FSPI_D3 ~ flash.HOLD_D3 # >>
+    FSPI_CLK ~ flash.CLK # <<
     FSPI_D0 ~ flash.DI_D0
 
 
