@@ -1,4 +1,49 @@
-"""Brand new atopile project!"""
+"""
+See Luckfox Pico Plus Schematic: https://files.luckfox.com/wiki/Luckfox-Pico/PDF/Luckfox-Pico-SCH/Luckfox%20Pico%20Plus.pdf
+"""
+import ElectricPower, Capacitor, Resistor
+from "rv1103.ato" import RV1103
 
 module App:
-    pass
+    mcu = new RV1103
+
+    VDD_0V9 = new ElectricPower
+    VDD_0V9.vcc ~ mcu.DVDD
+    VCC_DDR = new ElectricPower
+    VDD_0V9.gnd ~ mcu.VSS
+
+
+    # CPU_DVDD Decoupling Capacitors
+    C5 = new Capacitor; C5.value = 10uF +/- 20%; C5.package = "C0603"
+    C5.power ~ VDD_0V9
+    C6 = new Capacitor; C6.value = 1uF +/- 20%; C6.package = "C0402"
+    C6.power ~ VDD_0V9
+    C7 = new Capacitor; C7.value = 100nF +/- 20%; C7.package = "C0402"
+    C7.power ~ VDD_0V9
+
+    # VCC_DDR Decoupling Capacitors
+    C8 = new Capacitor; C8.value = 10uF +/- 20%; C8.package = "C0603"
+    C9 = new Capacitor; C9.value = 1uF +/- 20%; C9.package = "C0402"
+    C10 = new Capacitor; C10.value = 1uF +/- 20%; C10.package = "C0402"
+    C11 = new Capacitor; C11.value = 100nF +/- 20%; C11.package = "C0402"
+
+    # IO/NPU/VEPU DVDD Decoupling Capacitors
+    C14 = new Capacitor; C14.value = 10uF +/- 20%; C14.package = "C0402"
+    C14.power ~ VDD_0V9
+    C15 = new Capacitor; C15.value = 10uF +/- 20%; C15.package = "C0402"
+    C15.power ~ VDD_0V9
+    C16 = new Capacitor; C16.value = 10uF +/- 20%; C16.package = "C0402"
+    C16.power ~ VDD_0V9
+    C17 = new Capacitor; C17.value = 1uF +/- 20%; C17.package = "C0402"
+    C17.Power ~ VDD_0V9
+    C18 = new Capacitor; C18.value = 1uF +/- 20%; C18.package = "C0402"
+    C18.power ~ VDD_0V9
+    C19 = new Capacitor; C19.value = 100nF +/- 20%; C19.package = "C0402"
+    C19.power ~ VDD_0V9
+    C20 = new Capacitor; C20.value = 100nF +/- 20%; C20.package = "C0402"
+    C20.power ~ VDD_0V9
+    C21 = new Capacitor; C21.value = 100nF +/- 20%; C21.package = "C0402"
+    C21.power ~ VDD_0V9
+    C22 = new Capacitor; C22.value = 100nF +/- 20%; C22.package = "C0402"
+    C22.power ~ VDD_0V9
+

@@ -1,3 +1,4 @@
+# Rockchip RV1103 MCU
 component RV1103:
     """Rockchip_RV1103G1 component"""
     lcsc_id = "C5307358"
@@ -96,3 +97,7 @@ component RV1103:
     signal USB_DM ~ pin 18
     signal USB_DP ~ pin 19
     signal VSS ~ pin 89
+
+    signal DVDD ~ CPU_DVDD
+    DVDD ~ DVDD_1; DVDD ~ DVDD_2; DVDD ~ DVDD_3; DVDD ~ DVDD_4; DVDD ~ DVDD_5; DVDD ~ DVDD_6
+    DVDD ~ OSC_PLL_PMU_DVDD
