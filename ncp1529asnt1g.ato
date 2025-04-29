@@ -1,0 +1,14 @@
+component NCP1529ASNT1G:
+    """onsemi_NCP1529ASNT1G component"""
+    lcsc_id = "C23902"
+    manufacturer = "onsemi"
+    mpn = "NCP1529ASNT1G"
+    datasheet_url = "https://www.lcsc.com/datasheet/lcsc_datasheet_1809192014_onsemi-NCP1529ASNT1G_C23902.pdf"
+    designator_prefix = "U"
+
+    # pins
+    pin 1
+    pin 2
+    pin 3
+    pin 4
+    pin 5
